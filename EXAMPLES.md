@@ -1,10 +1,10 @@
-# devitrine Usage Examples
+# promoteme Usage Examples
 
-This document provides examples for using the `devitrine.sh` script to generate brag documents.
+This document provides examples for using the `promoteme.sh` script to generate brag documents.
 
 ## Prerequisites
 
-Before running `devitrine.sh`, ensure you have the following installed and configured:
+Before running `promoteme.sh`, ensure you have the following installed and configured:
 
 1.  **GitHub CLI (`gh`)**: Follow the official installation instructions for your OS.
     *   Authenticate your `gh` CLI by running `gh auth login`.
@@ -12,10 +12,10 @@ Before running `devitrine.sh`, ensure you have the following installed and confi
 
 ## Making the Script Executable
 
-If you haven't already, make the `devitrine.sh` script executable:
+If you haven't already, make the `promoteme.sh` script executable:
 
 ```bash
-chmod +x devitrine.sh
+chmod +x promoteme.sh
 ```
 
 ## Basic Usage
@@ -23,7 +23,7 @@ chmod +x devitrine.sh
 Run the script without any date filters to retrieve all your contributions across all time (or as far back as GitHub's API allows for search queries).
 
 ```bash
-./devitrine.sh
+./promoteme.sh
 ```
 
 ## Filter by a Specific Date Range
@@ -31,7 +31,7 @@ Run the script without any date filters to retrieve all your contributions acros
 Generate a brag document for contributions made within a specific period using `--start-date` and `--end-date`. Dates should be in `YYYY-MM-DD` format.
 
 ```bash
-./devitrine.sh --start-date 2023-01-01 --end-date 2023-03-31
+./promoteme.sh --start-date 2023-01-01 --end-date 2023-03-31
 ```
 
 ## Filter from a Start Date Onwards
@@ -39,7 +39,7 @@ Generate a brag document for contributions made within a specific period using `
 Generate a brag document for all contributions from a specific start date up to the present.
 
 ```bash
-./devitrine.sh --start-date 2024-06-01
+./promoteme.sh --start-date 2024-06-01
 ```
 
 ## Filter Up to an End Date
@@ -47,7 +47,7 @@ Generate a brag document for all contributions from a specific start date up to 
 Generate a brag document for all contributions from the beginning of time up to a specific end date.
 
 ```bash
-./devitrine.sh --end-date 2023-12-31
+./promoteme.sh --end-date 2023-12-31
 ```
 
 ## Example Output

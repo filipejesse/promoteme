@@ -1,7 +1,7 @@
-# devitrine Context
+# promoteme Context
 
 ## Project Overview
-`devitrine` is a CLI tool designed to help developers create "brag documents" — summaries of their contributions and achievements over a period of time. It automates the retrieval of contribution data from repositories and Pull Requests to generate comprehensive summaries.
+`promoteme` is a CLI tool designed to help developers create "brag documents" — summaries of their contributions and achievements over a period of time. It automates the retrieval of contribution data from repositories and Pull Requests to generate comprehensive summaries.
 
 ## Tech Stack
 - **Language:** Bash

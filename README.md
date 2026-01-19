@@ -1,4 +1,4 @@
-# devitrine
+# promoteme
 
 This will be a CLI that helps you to write your own brag documents. 
 
