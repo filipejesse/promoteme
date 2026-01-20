@@ -1,8 +1,8 @@
 [package]
 name = "promoteme"
 version = "0.1.0"
-edition = "2021"
-description = "CLI tool that generates brag documents from GitHub contributions"
+edition = "2026"
+description = "CLI tool that generates brag documents from your contributions"
 license = "MIT"
 repository = "https://github.com/g4rcez/promoteme"
 keywords = ["cli", "github", "brag-document", "performance-review"]
@@ -16,3 +16,4 @@ serde_json = "1"
 chrono = "0.4"
 rayon = "1.8"
 indicatif = "0.17"
+
