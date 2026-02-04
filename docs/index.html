@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PromoteMe | Automated Contribution Tracking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500;700&family=Roboto:wght@400;500&display=swap");
+      :root {
+        --color-brand: #10b981;
+        --color-background: #121212;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: var(--color-background);
+        color: #e0e0e0;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      .title-font {
+        font-family: "Outfit", sans-serif;
+      }
+
+      .hero-gradient {
+        background: radial-gradient(
+          circle at top center,
+          #064e3b 0%,
+          #01120D 30%
+        );
+      }
+
+      .page-gradient {
+        background: radial-gradient(
+          circle at top center,
+          #021F17 0%,
+          #050505 60%
+        );
+      }
+
+
+      .text-brand {
+        color: var(--color-brand);
+      }
+
+      .accent-text {
+        background: linear-gradient(to right, #10b981, #047857);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .terminal-window {
+        background-color: #0f0f0f;
+        border: 1px solid #333;
+        box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+
+  <body class="hero-gradient relative flex min-h-screen flex-col">
+    <div class="page-gradient" />
+    <!-- Navigation -->
+    <nav class="mx-auto flex w-full max-w-6xl items-center justify-between p-6">
+      <div class="title-font flex items-center gap-2 text-xl font-bold tracking-tight">
+        <div class="h-3 w-3 rounded-full bg-emerald-600"></div>
+        PromoteMe
+      </div>
+      <a href="https://github.com/g4rcez/promoteme" class="text-sm font-medium text-slate-400 transition hover:text-white">GitHub</a>
+    </nav>
+    <header class="flex flex-grow flex-col items-center justify-center px-4 py-16 text-center">
+      <div class="mb-6 rounded-full border border-emerald-900 bg-emerald-950/30 px-3 py-1 font-mono text-xs tracking-widest text-emerald-400 uppercase">v1.0.0</div>
+      <h1 class="mb-6 max-w-4xl text-5xl font-bold tracking-tight text-pretty text-white md:text-7xl">
+        Your work is
+        <span class="accent-text">amazing.</span>
+        But nobody knows it.
+      </h1>
+      <p class="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-400 md:text-xl">
+        Engineers build systems but often forget to document their own impact.
+        <br />
+        <strong>PromoteMe</strong> aggregates your contributions from GitHub and task management systems into data-driven brag documents.
+      </p>
+
+      <div class="flex flex-col items-center gap-4 md:flex-row">
+        <a href="https://github.com/g4rcez/promoteme" class="bg-emerald-800 hover:bg-emerald-900 rounded-md px-8 py-3 text-sm font-medium text-white shadow-lg shadow-emerald-900/20 transition"> Install CLI </a>
+        <div class="flex items-center gap-3 rounded-md border border-slate-800 bg-slate-900/50 px-4 py-3">
+          <code class="font-mono text-sm text-emerald-500">$ cargo install promoteme</code>
+          <button onclick="navigator.clipboard.writeText('npx promoteme generate')" class="text-slate-500 transition hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 002-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <section class="mx-auto mb-24 w-full max-w-4xl px-4">
+      <div class="terminal-window overflow-hidden rounded-lg font-mono text-sm">
+        <div class="flex items-center gap-2 border-b border-slate-800 bg-slate-800/50 px-4 py-2">
+          <div class="h-3 w-3 rounded-full bg-red-500/50"></div>
+          <div class="h-3 w-3 rounded-full bg-yellow-500/50"></div>
+          <div class="h-3 w-3 rounded-full bg-green-500/50"></div>
+          <div class="ml-2 text-xs text-slate-500">user@localhost ~</div>
+        </div>
+        <div class="space-y-2 p-6 text-slate-300">
+          <code>
+            <pre>
+&gt;_ promote generate
+
+Fetching PRs for user: user...
+Output directory created: user
+Found 142 PRs. Processing...
+[00:00:02] [########################################] 142/142 PRs
+Saved report: user/my_repository.md
+Generating final consolidated brag document...
+Final document generated using claude: user/README.md
+          </pre
+            >
+          </code>
+        </div>
+      </div>
+    </section>
+
+    <!-- Value Proposition -->
+    <section class="border-t border-slate-900 bg-slate-950/50 py-24">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-12 px-6">
+        <div class="max-w-xs">
+          <h3 class="mb-2 text-lg font-bold text-white">Automated Discovery</h3>
+          <p class="text-sm leading-relaxed text-slate-500">Eliminate manual searching. Connect your engineering toolstack to automatically retrieve and categorize your work history.</p>
+        </div>
+        <div class="max-w-xs">
+          <h3 class="mb-2 text-lg font-bold text-white">Objective Impact</h3>
+          <p class="text-sm leading-relaxed text-slate-500">Transform raw commit logs into business-readable summaries. Quantify your contributions with data, not just memory.</p>
+        </div>
+        <div class="max-w-xs">
+          <h3 class="mb-2 text-lg font-bold tracking-wide text-white">Documentation Enforcement</h3>
+          <p class="text-sm leading-relaxed text-slate-500">Forgetting to document work is a common point of failure. PromoteMe ensures your achievements are permanently recorded.</p>
+        </div>
+        <div class="max-w-xs">
+          <h3 class="mb-2 text-lg font-bold tracking-wide text-white">Your document, your data</h3>
+          <p class="text-sm leading-relaxed text-slate-500">Use your own tools to generate the report. You just need the <a href="https://cli.github.com/">github cli</a> and the magic happens.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="mx-auto max-w-4xl px-6 py-24">
+      <h2 class="mb-16 text-center text-3xl font-bold tracking-wide text-white">Workflow Comparison</h2>
+
+      <div class="grid overflow-hidden rounded-lg border border-slate-800 bg-slate-900/20 md:grid-cols-2">
+        <!-- Manual -->
+        <div class="border-b border-slate-800 p-8 md:border-r md:border-b-0">
+          <h3 class="mb-6 text-sm font-bold tracking-wider text-slate-400 uppercase">Manual Tracking</h3>
+          <ul class="space-y-4 text-sm text-slate-400">
+            <li class="flex gap-3">
+              <span class="text-red-400">✕</span>
+              <span>Relying on memory for past contributions</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-red-400">✕</span>
+              <span>Incomplete documentation of technical wins</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-red-400">✕</span>
+              <span>Time-consuming retroactive context gathering</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Automated -->
+        <div class="bg-emerald-950/10 p-8">
+          <h3 class="mb-6 text-sm font-bold tracking-wider text-emerald-400 uppercase">PromoteMe</h3>
+          <ul class="space-y-4 text-sm text-slate-300">
+            <li class="flex gap-3">
+              <span class="text-emerald-400">✓</span>
+              <span>Real-time aggregation of PRs and tickets</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-emerald-400">✓</span>
+              <span>Structured, persistent record of achievement</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-emerald-400">✓</span>
+              <span>Instant generation of review artifacts</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <footer class="border-t border-slate-900 py-12 text-center">
+      <p class="mb-4 text-sm text-slate-600">Ensure your work counts.</p>
+      <a href="https://github.com/g4rcez/promoteme" class="text-sm font-medium text-emerald-500 transition hover:text-emerald-400"> View Source on GitHub </a>
+    </footer>
+  </body>
+</html>
+
