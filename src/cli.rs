@@ -33,5 +33,9 @@ pub enum Commands {
         /// Directory with personal notes (.md/.txt) about non-code contributions
         #[arg(long)]
         notes: Option<String>,
+
+        /// Custom output directory (default: {username}_{timestamp}Z)
+        #[arg(long)]
+        cwd: Option<String>,
     },
 }

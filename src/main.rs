@@ -29,8 +29,9 @@ fn main() -> Result<()> {
             language,
             model,
             notes,
+            cwd,
         }) => {
-            run_generate(start_date, end_date, org, repo, language, model, notes)?;
+            run_generate(start_date, end_date, org, repo, language, model, notes, cwd)?;
         }
         None => {
             println!("Usage: promoteme <command> [OPTIONS]");
@@ -53,6 +54,7 @@ fn run_generate(
     language: Option<String>,
     model: String,
     notes_dir: Option<String>,
+    cwd: Option<String>,
 ) -> Result<()> {
     check_gh_installed()?;
     check_gh_auth()?;
@@ -66,9 +68,13 @@ fn run_generate(
 
     let dir_suffix = build_dir_suffix(&start, &end);
 
-    let output_dir = Path::new(&current_user);
+    let output_dir_name = match cwd {
+        Some(dir) => dir,
+        None => format!("{}_{}", current_user, get_timestamp_suffix()),
+    };
+    let output_dir = Path::new(&output_dir_name);
     fs::create_dir_all(output_dir)?;
-    println!("📂 Output directory created: {}", output_dir.display());
+    println!("Output directory created: {}", output_dir.display());
 
     let prs = fetch_prs(
         &current_user,
@@ -220,4 +226,8 @@ fn build_dir_suffix(start: &Option<String>, end: &Option<String>) -> String {
         (None, Some(e)) => format!("UNTIL_{}", e),
         (None, None) => "ALL_TIME".to_string(),
     }
+}
+
+fn get_timestamp_suffix() -> String {
+    Utc::now().format("%Y%m%dT%H%M%SZ").to_string()
 }
