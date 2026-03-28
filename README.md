@@ -11,6 +11,8 @@ A CLI that helps you write brag documents by analyzing your GitHub contributions
 - Personal notes integration
 - Date range filtering
 - Organization and repository filtering
+- Team mode: analyze all members of an org and generate a team performance overview
+- Team config (`team.json`): assign seniority levels and roles for level-aware AI evaluation
 
 ## Prerequisites
 
@@ -46,6 +48,9 @@ Options:
   -l, --language  Output language (English, Portuguese, etc.)
   -m, --model     AI model: claude (default), gemini. Use cli@model format for specific model.
   --notes         Directory with personal notes (.md/.txt)
+  --team          Enable team mode (requires --members or --org)
+  --members       Comma-separated GitHub usernames for team mode
+  --setup         Write team.json template and exit (requires --team)
 ```
 
 ### Examples
@@ -89,6 +94,40 @@ Include personal notes:
 ```bash
 promoteme generate --notes ~/my-notes
 ```
+
+### Team mode
+
+Analyze all members of an organization and generate a team performance overview:
+```bash
+promoteme generate --team --org my-company --start-date 2025-01-01
+```
+
+Analyze a specific set of members:
+```bash
+promoteme generate --team --members alice,bob,carol --start-date 2025-01-01
+```
+
+#### Level-aware evaluation with `team.json`
+
+Generate a `team.json` config template pre-populated with all org members:
+```bash
+promoteme generate --team --org my-company --setup
+```
+
+Edit `team.json` to set each member's seniority level and role:
+```json
+{
+  "members": {
+    "alice": { "level": "senior", "role": "Backend Engineer" },
+    "bob":   { "level": "tech_lead", "role": null },
+    "carol": { "level": "junior", "role": "Frontend Engineer" }
+  }
+}
+```
+
+Valid levels: `junior`, `mid`, `senior`, `tech_lead`, `specialist`, `architect`, `manager`
+
+When `team.json` is present in the current directory, `promoteme` loads it automatically and the AI evaluates each member's contributions relative to their expected level.
 
 ## Tech stack
 

@@ -37,5 +37,15 @@ pub enum Commands {
         /// Custom output directory (default: {username}_{timestamp}Z)
         #[arg(long)]
         cwd: Option<String>,
+
+        #[arg(long)]
+        team: bool,
+
+        /// Comma-separated GitHub usernames (required when --team is set)
+        #[arg(long)]
+        members: Option<String>,
+
+        #[arg(long)]
+        setup: bool,
     },
 }
