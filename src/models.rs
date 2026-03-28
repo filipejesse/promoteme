@@ -7,6 +7,22 @@ pub struct SearchResult {
     pub repo: String,
     pub created_at: String,
     pub state: String,
+    #[serde(default)]
+    #[allow(dead_code)]
+    pub author: String,
+}
+
+pub struct MemberStats {
+    pub username: String,
+    pub prs_merged: u32,
+    pub prs_open: u32,
+    pub total_additions: i64,
+    pub total_deletions: i64,
+    pub reviews_given: u32,
+    pub prs_with_tests: u32,
+    pub small_prs: u32,
+    pub large_prs: u32,
+    pub score: i64,
 }
 
 #[derive(Debug, Deserialize)]

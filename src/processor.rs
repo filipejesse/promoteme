@@ -1,21 +1,9 @@
 use anyhow::Result;
 use indicatif::{ProgressBar, ProgressStyle};
 use rayon::prelude::*;
-use std::collections::HashMap;
 
 use crate::github::fetch_pr_details;
 use crate::models::{ProcessedPr, SearchResult};
-
-/// Group PRs by repository
-pub fn group_prs_by_repo(prs: Vec<SearchResult>) -> HashMap<String, Vec<SearchResult>> {
-    let mut grouped: HashMap<String, Vec<SearchResult>> = HashMap::new();
-
-    for pr in prs {
-        grouped.entry(pr.repo.clone()).or_default().push(pr);
-    }
-
-    grouped
-}
 
 /// Process a single PR to extract details
 pub fn process_pr(pr: &SearchResult) -> Result<ProcessedPr> {

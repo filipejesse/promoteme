@@ -85,6 +85,31 @@ pub fn generate_final_document(
     invoke_ai(model, &prompt)
 }
 
+pub fn generate_team_document(
+    model: &str,
+    members_content: &str,
+    language: Option<&str>,
+) -> Result<String> {
+    let mut prompt = "You are an Engineering Manager writing a team performance overview. \
+        Analyze the following team members' contributions and:\n\
+        1. Identify overall team patterns and delivery trends.\n\
+        2. Call out standout contributors and explain why.\n\
+        3. Surface collaboration signals (code reviews, cross-repo work).\n\
+        4. Provide a brief per-member narrative from a leadership perspective.\n\
+        5. Format the output as a structured markdown document suitable for a team retrospective or performance cycle.\n\
+        6. Where a member's Level and Role are provided, interpret their output relative to what is expected at that level \
+           (e.g. a junior delivering complex cross-cutting work may warrant more recognition than a senior doing the same).\n\n"
+        .to_string();
+
+    if let Some(lang) = language {
+        prompt.push_str(&format!("Please provide the output in {}.\n\n", lang));
+    }
+
+    prompt.push_str(members_content);
+
+    invoke_ai(model, &prompt)
+}
+
 pub fn translate_report(model: &str, content: &str, language: &str) -> Result<String> {
     let prompt = format!(
         "Translate this markdown to {}. Keep markdown formatting and structure intact:\n\n{}",

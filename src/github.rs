@@ -86,7 +86,7 @@ pub fn fetch_prs(
             "-f",
             "per_page=30",
             "--jq",
-            r#".items[] | {title: .title, url: .html_url, repo: (.repository_url | sub("https://api.github.com/repos/"; "")), created_at: .created_at, state: .state}"#,
+            r#".items[] | {title: .title, url: .html_url, repo: (.repository_url | sub("https://api.github.com/repos/"; "")), created_at: .created_at, state: (if .pull_request.merged_at != null then "merged" else .state end), author: .user.login}"#,
         ])
         .output()
         .context("Failed to fetch PRs")?;
@@ -110,6 +110,84 @@ pub fn fetch_prs(
     }
 
     Ok(results)
+}
+
+/// Fetch count of PRs reviewed by a user
+pub fn fetch_reviews_by_user(
+    user: &str,
+    date_filter: Option<&str>,
+    org_filter: Option<&str>,
+    repo_filter: Option<&str>,
+) -> Result<usize> {
+    let mut query = format!("reviewed-by:{} type:pr", user);
+
+    if let Some(date) = date_filter {
+        query.push(' ');
+        query.push_str(date);
+    }
+
+    if let Some(orgs) = org_filter {
+        for org in orgs.split(',') {
+            query.push_str(&format!(" org:{}", org.trim()));
+        }
+    }
+
+    if let Some(repos) = repo_filter {
+        for repo in repos.split(',') {
+            query.push_str(&format!(" repo:{}", repo.trim()));
+        }
+    }
+
+    let output = Command::new("gh")
+        .args([
+            "api",
+            "-X",
+            "GET",
+            "search/issues",
+            "-f",
+            &format!("q={}", query),
+            "--jq",
+            ".total_count",
+        ])
+        .output()
+        .context("Failed to fetch review count")?;
+
+    if !output.status.success() {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        bail!("Failed to fetch reviews for {}: {}", user, stderr);
+    }
+
+    let stdout = String::from_utf8(output.stdout)?;
+    let count: usize = stdout.trim().parse().unwrap_or(0);
+    Ok(count)
+}
+
+/// Fetch all members of a GitHub organization
+pub fn fetch_org_members(org: &str) -> Result<Vec<String>> {
+    let output = Command::new("gh")
+        .args([
+            "api",
+            &format!("orgs/{}/members", org),
+            "--paginate",
+            "--jq",
+            ".[].login",
+        ])
+        .output()
+        .context("Failed to fetch org members")?;
+
+    if !output.status.success() {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        bail!("Failed to fetch members for org {}: {}", org, stderr);
+    }
+
+    let stdout = String::from_utf8(output.stdout)?;
+    let members: Vec<String> = stdout
+        .lines()
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty())
+        .collect();
+
+    Ok(members)
 }
 
 /// Fetch detailed PR information
