@@ -48,7 +48,7 @@ Rust CLI with multiple modules:
 
 **Output structure (individual mode):**
 ```
-{username}_{timestamp}/
+artifacts/{username}_{timestamp}/
   ├── {repo1}.md        # Per-repo PR analysis
   ├── {repo2}.md
   ├── NOTES_SUMMARY.md  # (optional) AI summary of personal notes
@@ -57,7 +57,7 @@ Rust CLI with multiple modules:
 
 **Output structure (team mode):**
 ```
-team_{timestamp}/
+artifacts/team_{timestamp}/
   ├── {member1}.md      # Per-member contribution report
   ├── {member2}.md
   ├── SCORES.md         # Quantitative scores table
@@ -78,7 +78,7 @@ team_{timestamp}/
 
 ## Team Config (`team.json`)
 
-When present in the working directory, loaded automatically during `--team` generate runs. The AI uses level/role context to evaluate contributions relative to seniority expectations.
+Stored at `artifacts/team.json` (written by `--setup`, auto-detected by generate). Covered by `.gitignore`. The AI uses level/role context to evaluate contributions relative to seniority expectations.
 
 ```json
 {

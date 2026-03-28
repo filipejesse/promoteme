@@ -85,7 +85,7 @@ promoteme generate --team --org my-company --start-date 2025-01-01
 
 ### Individual mode
 ```
-{username}_{timestamp}/
+artifacts/{username}_{timestamp}/
   {repo1}.md        # Per-repo PR analysis
   {repo2}.md
   README.md         # AI-generated executive summary
@@ -94,9 +94,12 @@ promoteme generate --team --org my-company --start-date 2025-01-01
 
 ### Team mode
 ```
-team_{timestamp}/
+artifacts/team_{timestamp}/
   {member1}.md      # Per-member contribution report
   {member2}.md
   SCORES.md         # Quantitative scores table
   README.md         # AI-generated team performance overview
 ```
+
+> All output is written under `artifacts/` and ignored by git.
+> Use `--cwd` to override the output path entirely (no prefix is added).

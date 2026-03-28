@@ -34,7 +34,7 @@ pub enum Commands {
         #[arg(long)]
         notes: Option<String>,
 
-        /// Custom output directory (default: {username}_{timestamp}Z)
+        /// Custom output directory (default: artifacts/{username}_{timestamp}Z). If provided, used as-is (no artifacts/ prefix).
         #[arg(long)]
         cwd: Option<String>,
 

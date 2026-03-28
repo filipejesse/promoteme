@@ -17,7 +17,7 @@ use crate::ai::{check_ai_available, concatenate_reports, generate_final_document
 use crate::cli::{Cli, Commands};
 use crate::github::{check_gh_auth, check_gh_installed, fetch_org_members, fetch_prs, fetch_reviews_by_user, get_current_user};
 use crate::notes::collect_notes;
-use crate::processor::{generate_repo_report, group_prs_by_repo, process_all_prs};
+use crate::processor::{generate_repo_report, process_all_prs};
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
@@ -88,7 +88,7 @@ fn run_generate(
     let dir_suffix = build_dir_suffix(&start, &end);
 
     let output_dir_name = match cwd {
-        Some(dir) => format!("artifacts/{}", dir),
+        Some(dir) => dir,
         None => format!("artifacts/{}_{}", current_user, get_timestamp_suffix()),
     };
     let output_dir = Path::new(&output_dir_name);
@@ -116,20 +116,6 @@ fn run_generate(
         return Ok(());
     }
 
-    let grouped = group_prs_by_repo(
-        processed_prs
-            .iter()
-            .map(|p| models::SearchResult {
-                title: p.title.clone(),
-                url: p.url.clone(),
-                repo: p.repo.clone(),
-                created_at: p.created_at.clone(),
-                state: p.state.clone(),
-                author: String::new(),
-            })
-            .collect(),
-    );
-
     let mut repo_processed: std::collections::HashMap<String, Vec<&models::ProcessedPr>> =
         std::collections::HashMap::new();
     for pr in &processed_prs {
@@ -137,28 +123,26 @@ fn run_generate(
     }
 
     let mut reports: Vec<(String, String)> = Vec::new();
-    for (repo, _) in &grouped {
-        if let Some(prs) = repo_processed.get(repo) {
-            let prs_owned: Vec<models::ProcessedPr> = prs.iter().map(|p| (*p).clone()).collect();
-            let report = generate_repo_report(repo, &prs_owned);
+    for (repo, prs) in &repo_processed {
+        let prs_owned: Vec<models::ProcessedPr> = prs.iter().map(|p| (*p).clone()).collect();
+        let report = generate_repo_report(repo, &prs_owned);
 
-            let final_report = if let Some(ref lang) = language {
-                if check_ai_available(&model) {
-                    translate_report(&model, &report, lang)?
-                } else {
-                    report
-                }
+        let final_report = if let Some(ref lang) = language {
+            if check_ai_available(&model) {
+                translate_report(&model, &report, lang)?
             } else {
                 report
-            };
+            }
+        } else {
+            report
+        };
 
-            let filename = repo.replace('/', "_");
-            let report_path = output_dir.join(format!("{}.md", filename));
-            fs::write(&report_path, &final_report)?;
-            println!("✅ Saved report: {}", report_path.display());
+        let filename = repo.replace('/', "_");
+        let report_path = output_dir.join(format!("{}.md", filename));
+        fs::write(&report_path, &final_report)?;
+        println!("✅ Saved report: {}", report_path.display());
 
-            reports.push((repo.clone(), final_report));
-        }
+        reports.push((repo.clone(), final_report));
     }
 
     let notes_content = if let Some(ref notes_path) = notes_dir {
@@ -230,21 +214,22 @@ fn resolve_members(members_opt: Option<String>, org_filter: Option<String>) -> R
         return Ok(list);
     }
 
-    let orgs: Vec<&str> = org_filter
-        .as_deref()
-        .unwrap()
+    let orgs_str = org_filter
+        .ok_or_else(|| anyhow!("You must specify either --members or --org"))?;
+    let orgs: Vec<&str> = orgs_str
         .split(',')
         .map(|s| s.trim())
         .filter(|s| !s.is_empty())
         .collect();
 
+    let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
     let mut all_members: Vec<String> = Vec::new();
     for org in &orgs {
         println!("Fetching members from org {}...", org);
         let org_members = fetch_org_members(org)?;
         println!("Found {} members in {}.", org_members.len(), org);
         for m in org_members {
-            if !all_members.contains(&m) {
+            if seen.insert(m.clone()) {
                 all_members.push(m);
             }
         }
@@ -282,9 +267,10 @@ fn run_team_generate(
 
     let members = resolve_members(members_opt, org_filter.clone())?;
 
-    let team_config = config::load_team_config(Path::new("artifacts"))?;
+    let config_dir = Path::new("artifacts");
+    let team_config = config::load_team_config(config_dir)?;
     if team_config.is_some() {
-        println!("Loaded team config from team.json.");
+        println!("Loaded team config from {}.", config_dir.join("team.json").display());
     }
 
     println!("Team mode: analyzing {} members...", members.len());

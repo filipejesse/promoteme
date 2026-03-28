@@ -114,7 +114,7 @@ Generate a `team.json` config template pre-populated with all org members:
 promoteme generate --team --org my-company --setup
 ```
 
-Edit `team.json` to set each member's seniority level and role:
+Edit `artifacts/team.json` to set each member's seniority level and role:
 ```json
 {
   "members": {
@@ -127,7 +127,7 @@ Edit `team.json` to set each member's seniority level and role:
 
 Valid levels: `junior`, `mid`, `senior`, `tech_lead`, `specialist`, `architect`, `manager`
 
-When `team.json` is present in the current directory, `promoteme` loads it automatically and the AI evaluates each member's contributions relative to their expected level.
+When `artifacts/team.json` is present, `promoteme` loads it automatically and the AI evaluates each member's contributions relative to their expected level.
 
 ## Tech stack
 
